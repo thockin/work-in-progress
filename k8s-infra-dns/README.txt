@@ -15,6 +15,22 @@ HOW TO RUN:
 
 docker build -t thockin/octodns .
 
+# To run as yourself:
+docker run -ti \
+    -u `id -u` \
+    -v ~/.config/gcloud:/.config/gcloud:ro \
+    -v `pwd`/config:/octodns/config:ro \
+    -v `pwd`/config.yaml:/octodns/config.yaml:ro \
+    thockin/octodns \
+    octodns-sync \
+        --config-file=/octodns/config.yaml \
+        --log-stream-stdout \
+        --debug \
+        --doit
+
+
+# To run automated (with service account creds), get the JSON for the service
+# account, edit config.yaml and un-comment the `credentials_file`.
 docker run -ti \
     -v `pwd`/config:/octodns/config \
     -v `pwd`/octodns-dns-admin-creds.json:/octodns/creds/gcp.json \
@@ -25,6 +41,7 @@ docker run -ti \
         --log-stream-stdout \
         --debug \
         --doit
+
 
 ------------------------
 

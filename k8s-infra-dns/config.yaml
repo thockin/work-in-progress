@@ -8,7 +8,7 @@ providers:
   gcp:
     class: octodns.provider.googlecloud.GoogleCloudProvider
     project: kubernetes-public
-    credentials_file: '/octodns/creds/gcp.json'
+    #credentials_file: '/octodns/creds/gcp.json'
 
 zones:
   kubernetes.io.:
