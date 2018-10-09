@@ -35,26 +35,16 @@ manual runs are OK.
 
 From this repo:
 
-```
-docker build -t myname/octodns ./octodns
+```sh
+./build.sh
 ```
 
 ### Running as yourself
 
 If you want to run it as yourself, using yor own Google Cloud credentials:
 
-```
-docker run -ti \
-    -u `id -u` \
-    -v ~/.config/gcloud:/.config/gcloud:ro \
-    -v `pwd`/config:/octodns/config:ro \
-    -v `pwd`/config.yaml:/octodns/config.yaml:ro \
-    myname/octodns \
-    octodns-sync \
-        --config-file=/octodns/config.yaml \
-        --log-stream-stdout \
-        --debug \
-        --doit # leave this off if you want to do a dry-run
+```sh
+./sync-manual.sh
 ```
 
 ### Running automated
