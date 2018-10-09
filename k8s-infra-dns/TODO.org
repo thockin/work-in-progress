@@ -1,4 +1,17 @@
+# -*- org-use-property-inheritance: t; -*-
+#+TITLE: Todo / Process Documentation
+#+AUTHOR: Hippie Hacker
+#+EMAIL: hh@ii.coop
+#+CREATOR: k8s-infra-team
+#+DATE: October 10th, 2018
+#+PROPERTY: header-args:tmux :socket "/tmp/hh-tmate.socket"
+#+PROPERTY: header-args:tmux :session "k8s:apisnoop"
+#+PROPERTY: header-args:tmux :results "silent"
+#+PROPERTY: header-args:shell :exports both :results raw code :wrap "SRC text" :eval never-export
+#+PROPERTY: header-args:text :exports both
+
 * Setup gcloud config
+** TODO Consider using 'gcloud config set project` or setting the GOOGLE_CLOUD_PROJECT environment variable
 ** kubernetes-public
 
 #+NAME: configure gcloud
@@ -11,7 +24,7 @@ gcloud config set disable_usage_reporting true
 #+END_SRC
 
 #+NAME: gcloud config list
-#+BEGIN_SRC shell :results raw code :wrap "SRC text"
+#+BEGIN_SRC shell
 gcloud config list
 #+END_SRC
 
@@ -26,7 +39,7 @@ project = kubernetes-public
 ** cncf-ci
 
 #+NAME: configure gcloud
-#+BEGIN_SRC shell :results silent
+#+BEGIN_SRC shell :results silent :
 gcloud config configurations create cncf-ci
 gcloud config configurations activate cncf-ci
 gcloud config set account hh@ii.coop
@@ -35,7 +48,7 @@ gcloud config set disable_usage_reporting true
 #+END_SRC
 
 #+NAME: gcloud configuration list
-#+BEGIN_SRC shell :results raw code :wrap "SRC text"
+#+BEGIN_SRC shell 
 gcloud config configurations list
 #+END_SRC
 
@@ -74,7 +87,7 @@ k8s-io   False      hh@ii.coop              kubernetes-public
      CLOSED: [2018-10-10 Wed 04:51]
     
  #+NAME: describe zone k8s-cncf-ci
- #+BEGIN_SRC shell :results raw code :wrap "SRC text"
+ #+BEGIN_SRC shell
  gcloud dns managed-zones describe k8s-cncf-ci
  #+END_SRC
 
@@ -114,7 +127,7 @@ k8s-io   False      hh@ii.coop              kubernetes-public
  This was done via the console in dnsimple, as the top level is not hosted with gcp.
 
  #+NAME: dig k8s.cncf.ci NS
- #+BEGIN_SRC shell :results raw code :wrap "SRC text"
+ #+BEGIN_SRC shell
  dig k8s.cncf.ci NS | grep "IN.*NS"
  #+END_SRC
 
@@ -129,7 +142,7 @@ k8s-io   False      hh@ii.coop              kubernetes-public
 
 ** TODO Setting up canary.{k8s,kubernetes}.io
 
-*** DONE Creates canary zones in gcloud
+*** DONE Create canary zones in gcloud
     CLOSED: [2018-10-10 Wed 05:19]
 **** DONE create canary-k8s-io zone in gcloud
      CLOSED: [2018-10-10 Wed 05:19]
@@ -142,10 +155,9 @@ k8s-io   False      hh@ii.coop              kubernetes-public
 
 **** DONE create canary-kubernetes-io zone in gcloud
      CLOSED: [2018-10-10 Wed 05:19]
- ##+BEGIN_SRC shell :noeval
 
  #+NAME: Setup gcloud subdomain
- #+BEGIN_SRC shell :results silent
+ #+BEGIN_SRC shell :noeval
  gcloud dns --project=kubernetes-public managed-zones create canary-kubernetes-io --description= --dns-name=canary.kubernetes.io.
  #+END_SRC
 
@@ -155,7 +167,7 @@ k8s-io   False      hh@ii.coop              kubernetes-public
      CLOSED: [2018-10-10 Wed 05:20]
     
  #+NAME: gcloud describe canary-k8s-io
- #+BEGIN_SRC shell :results raw code :wrap "SRC text"
+ #+BEGIN_SRC shell
  gcloud dns managed-zones describe canary-k8s-io
  #+END_SRC
 
@@ -178,7 +190,7 @@ k8s-io   False      hh@ii.coop              kubernetes-public
      CLOSED: [2018-10-10 Wed 05:20]
 
  #+NAME: gcloud describe canary-kubernetes-io
- #+BEGIN_SRC shell :results raw code :wrap "SRC text"
+ #+BEGIN_SRC shell
  gcloud dns managed-zones describe canary-kubernetes-io
  #+END_SRC
 
@@ -217,8 +229,6 @@ k8s-io   False      hh@ii.coop              kubernetes-public
 
 **** TODO NS records for canary.kubernetes.io
 
- Funnily enough, 
-
  #+NAME: NS records for current kubernetes.io zone
  #+BEGIN_SRC shell :noeval
  gcloud dns --project=kubernetes-public record-sets transaction start --zone=kubernetes-io
@@ -242,7 +252,7 @@ k8s-io   False      hh@ii.coop              kubernetes-public
 
 *** dry run
  #+NAME: canary dry run
- #+BEGIN_SRC shell :results raw code :wrap "SRC text"
+ #+BEGIN_SRC shell
  docker run \
      -u `id -u` \
      -v ~/.config/gcloud:/.config/gcloud:ro \
@@ -466,7 +476,7 @@ k8s-io   False      hh@ii.coop              kubernetes-public
 
 *** doit run
  #+NAME: canary doit run
- #+BEGIN_SRC shell :results raw code :wrap "SRC text"
+ #+BEGIN_SRC shell
  docker run \
      -u `id -u` \
      -v ~/.config/gcloud:/.config/gcloud:ro \
@@ -700,7 +710,7 @@ k8s-io   False      hh@ii.coop              kubernetes-public
  Just looking up the A record for now.
 
  #+NAME: dig k8s.cncf.ci A
- #+BEGIN_SRC shell :results raw code :wrap "SRC text"
+ #+BEGIN_SRC shell
  dig k8s.cncf.ci A | grep "IN.*A"
  #+END_SRC
 
@@ -722,7 +732,7 @@ k8s-io   False      hh@ii.coop              kubernetes-public
 *** DONE dry run
     CLOSED: [2018-10-10 Wed 05:25]
  #+NAME: canary.{k8s,kubernetes}.io dry run
- #+BEGIN_SRC shell :results raw code :wrap "SRC text"
+ #+BEGIN_SRC shell
  docker run \
      -u `id -u` \
      -v ~/.config/gcloud:/.config/gcloud:ro \
@@ -1111,7 +1121,7 @@ k8s-io   False      hh@ii.coop              kubernetes-public
 *** DONE doit run
     CLOSED: [2018-10-10 Wed 05:26]
  #+NAME: canary.{k8s,kubernetes}.io doit run
- #+BEGIN_SRC shell :results raw code :wrap "SRC text"
+ #+BEGIN_SRC shell
  docker run \
      -u `id -u` \
      -v ~/.config/gcloud:/.config/gcloud:ro \
@@ -1518,7 +1528,7 @@ k8s-io   False      hh@ii.coop              kubernetes-public
 
 **** canary.k8s.io
   #+NAME: dig canary.k8s.io A
-  #+BEGIN_SRC shell :results raw code :wrap "SRC text"
+  #+BEGIN_SRC shell
   dig @ns-cloud-c1.googledomains.com. canary.k8s.io A | grep "IN.*A"
   #+END_SRC
 
@@ -1530,7 +1540,7 @@ k8s-io   False      hh@ii.coop              kubernetes-public
 
 **** canary.kubernetes.io
   #+NAME: dig canary.kubernetes.io A
-  #+BEGIN_SRC shell :results raw code :wrap "SRC text"
+  #+BEGIN_SRC shell
   dig @ns-cloud-b1.googledomains.com. canary.kubernetes.io A | grep "IN.*A"
   #+END_SRC
 
@@ -1552,7 +1562,7 @@ This are the authoritative name servers.
 The internet will ask them for info about k8s.io
 
 #+NAME: whois k8s.io
-#+BEGIN_SRC shell :results raw code :wrap "SRC text"
+#+BEGIN_SRC shell
 whois k8s.io | grep Name\ Server:
 #+END_SRC
 
@@ -1569,7 +1579,7 @@ Name Server: NS-CLOUD-B4.GOOGLEDOMAINS.COM
 By default dig should return the same as whois, if everything is configured properly.
 
 #+NAME: dig k8s.io
-#+BEGIN_SRC shell :results raw code :wrap "SRC text"
+#+BEGIN_SRC shell
 dig k8s.io NS | grep "IN.*NS"
 #+END_SRC
 
@@ -1588,7 +1598,7 @@ gcloud is configured to use the kubernetes-public project.
 The nameserver here are what we will need to update/switch the registar (namecheap).
 
 #+NAME: gcloude describe k8s-io
-#+BEGIN_SRC shell :results raw code :wrap "SRC text"
+#+BEGIN_SRC shell
 gcloud dns managed-zones describe k8s-io
 #+END_SRC
 
@@ -1625,7 +1635,7 @@ nameServers:
 If we query the DNS servers provided by the kubernetes-public account, we should see the new set of NS servers.
 
 #+NAME: dig @ns-cloud-a1.googledomains.com k8s.io
-#+BEGIN_SRC shell :results raw code :wrap "SRC text"
+#+BEGIN_SRC shell
 dig @ns-cloud-d1.googledomains.com k8s.io NS | grep "IN.*NS"
 #+END_SRC
 
@@ -1646,7 +1656,7 @@ k8s.io.			21600	IN	NS	ns-cloud-d4.googledomains.com.
 *** whois
 
 #+NAME: whois kubernetes.io
-#+BEGIN_SRC shell :results raw code :wrap "SRC text"
+#+BEGIN_SRC shell
 whois kubernetes.io | grep Name\ Server:
 #+END_SRC
 
@@ -1661,7 +1671,7 @@ Name Server: NS-CLOUD-C4.GOOGLEDOMAINS.COM
 *** dig
 
 #+NAME: dig kubernetes.io
-#+BEGIN_SRC shell :results raw code :wrap "SRC text"
+#+BEGIN_SRC shell
 dig kubernetes.io NS | grep "IN.*NS"
 #+END_SRC
 
@@ -1677,7 +1687,7 @@ kubernetes.io.		21600	IN	NS	ns-cloud-c4.googledomains.com.
 *** gcloud describe
 
 #+NAME: gcloude describe kubernetes-io
-#+BEGIN_SRC shell :results raw code :wrap "SRC text"
+#+BEGIN_SRC shell
 gcloud dns managed-zones describe kubernetes-io
 #+END_SRC
 
@@ -1712,7 +1722,7 @@ nameServers:
 *** dig @ns-cloud-a*.googledomains.com
 
 #+NAME: dig @ns-cloud-a1.googledomains.com kubernetes.io
-#+BEGIN_SRC shell :results raw code :wrap "SRC text"
+#+BEGIN_SRC shell
 dig @ns-cloud-a1.googledomains.com kubernetes.io NS | grep "IN.*NS"
 #+END_SRC
 
@@ -1729,7 +1739,7 @@ kubernetes.io.		21600	IN	NS	ns-cloud-a4.googledomains.com.
 *** dig (no public NS records yet)
 
 #+NAME: dig canary.k8s.io
-#+BEGIN_SRC shell :results raw code :wrap "SRC text"
+#+BEGIN_SRC shell
 dig canary.k8s.io NS | grep "IN.*NS"
 #+END_SRC
 
@@ -1741,7 +1751,7 @@ dig canary.k8s.io NS | grep "IN.*NS"
 *** gcloud describe (use these to create NS records in k8s.io)
 
 #+NAME: gcloude describe canary-k8s-io
-#+BEGIN_SRC shell :results raw code :wrap "SRC text"
+#+BEGIN_SRC shell
 gcloud dns managed-zones describe canary-k8s-io
 #+END_SRC
 
@@ -1763,7 +1773,7 @@ nameServers:
 *** dig @ns-cloud-d*.googledomains.com (NS Records should fix this)
 
 #+NAME: dig @ns-cloud-a1.googledomains.com k8s.io
-#+BEGIN_SRC shell :results raw code :wrap "SRC text"
+#+BEGIN_SRC shell
 dig @ns-cloud-c1.googledomains.com k8s.io NS | grep "IN.*NS"
 #+END_SRC
 
@@ -1780,7 +1790,7 @@ k8s.io.			21600	IN	NS	ns-cloud-d4.googledomains.com.
 *** dig (no public NS records yet)
 
 #+NAME: dig canary.kubernetes.io
-#+BEGIN_SRC shell :results raw code :wrap "SRC text"
+#+BEGIN_SRC shell
 dig canary.kubernetes.io NS | grep "IN.*NS"
 #+END_SRC
 
@@ -1792,7 +1802,7 @@ dig canary.kubernetes.io NS | grep "IN.*NS"
 *** gcloud describe (use these to create NS records in k8s.io)
 
 #+NAME: gcloude describe canary.kubernetes-io
-#+BEGIN_SRC shell :results raw code :wrap "SRC text"
+#+BEGIN_SRC shell
 gcloud dns managed-zones describe canary-kubernetes-io
 #+END_SRC
 
@@ -1814,7 +1824,7 @@ nameServers:
 *** dig @ns-cloud-b*.googledomains.com (NS happens to be the same as kubernetes.io!)
 
 #+NAME: dig @ns-cloud-b1.googledomains.com canary.kubernetes.io
-#+BEGIN_SRC shell :results raw code :wrap "SRC text"
+#+BEGIN_SRC shell
 dig @ns-cloud-b1.googledomains.com canary.kubernetes.io NS | grep "IN.*NS"
 #+END_SRC
 
@@ -1831,7 +1841,7 @@ canary.kubernetes.io.	21600	IN	NS	ns-cloud-b4.googledomains.com.
 *** dig
 
 #+NAME: dig k8s.cncf.ci
-#+BEGIN_SRC shell :results raw code :wrap "SRC text"
+#+BEGIN_SRC shell
 dig k8s.cncf.ci NS | grep "IN.*NS"
 #+END_SRC
 
@@ -1847,7 +1857,7 @@ k8s.cncf.ci.		21600	IN	NS	ns-cloud-e4.googledomains.com.
 *** gcloud describe
 
 #+NAME: gcloude describe k8s-cncf-ci
-#+BEGIN_SRC shell :results raw code :wrap "SRC text"
+#+BEGIN_SRC shell
 gcloud dns managed-zones describe k8s-cncf-ci
 #+END_SRC
 
@@ -1882,7 +1892,7 @@ nameServers:
 *** dig @ns-cloud-d*.googledomains.com
 
 #+NAME: dig @ns-cloud-e1.googledomains.com k8s.cncf.ci
-#+BEGIN_SRC shell :results raw code :wrap "SRC text"
+#+BEGIN_SRC shell
 dig @ns-cloud-e1.googledomains.com k8s.cncf.ci NS | grep "IN.*NS"
 #+END_SRC
 
@@ -1901,7 +1911,7 @@ k8s.cncf.ci.		21600	IN	NS	ns-cloud-e4.googledomains.com.
 ** [[https://github.com/thockin/work-in-progress/tree/master/k8s-infra-dns#docker-image][Build Docker Image]] 
 
 #+NAME: build docker image
-#+BEGIN_SRC shell :results raw code :wrap "SRC text" :async
+#+BEGIN_SRC shell
 docker build -t myname/octodns ./octodns
 #+END_SRC
 
